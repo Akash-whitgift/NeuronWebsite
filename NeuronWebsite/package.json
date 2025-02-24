@@ -1,0 +1,23 @@
+{
+  "type": "module",
+  "scripts": {
+    "dev": "vite dev"
+  },
+  "dependencies": {
+    "@tailwindcss/postcss7-compat": "^2.2.17",
+    "@threlte/core": "^8.0.1",
+    "@threlte/extras": "^9.0.1",
+    "@types/three": "^0.173.0",
+    "svelte": "^5.20.4",
+    "svelte-cubed": "^0.2.1",
+    "three": "^0.173.0"
+  },
+  "devDependencies": {
+    "@sveltejs/kit": "^2.17.2",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^4.0.8",
+    "vite": "^6.0.0"
+  }
+}
