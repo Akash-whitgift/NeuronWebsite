@@ -11,11 +11,21 @@
 
   const cameraPositions = [
     [10, 15, 20],    // Initial view - further back
-    [5, 5, 10],      // Soma
-    [10, 5, 10],     // Dendrites
+    [5, 5, 5],      // Soma
+    [5, 3, 5],     // Dendrites
     [-5, 2, 2],    // Axon
-    [0, 5, 10]      // Synaptic terminals
+    [0, 5, -10]      // Synaptic terminals
   ];
+
+  const focusTargets = [
+    [0, 0, 0],       // Initial view - origin
+    [0, 0, 2],       // Soma
+    [2.5, 0.5, 4],       // Dendrites
+    [0, 0, -1],      // Axon
+    [0, 0, -4]        // Synaptic terminals
+  ];
+
+  const fovs = [20, 50, 45, 40, 30]; // FOV values for each section
 
   $: currentSection = Math.floor(progress * 4);
   $: sectionProgress = (progress * 4) % 1;
@@ -25,7 +35,19 @@
     easing: cubicInOut
   });
 
+  const fov = tweened(fovs[0], {
+    duration: 2000,
+    easing: cubicInOut
+  });
+
+  const targetPos = tweened(focusTargets[0], {
+    duration: 2000,
+    easing: cubicInOut
+  });
+
   $: cameraPos.set(cameraPositions[currentSection]);
+  $: fov.set(fovs[currentSection]);
+  $: targetPos.set(focusTargets[currentSection]);
 
   let model;
   let scene;
@@ -35,7 +57,7 @@
 
   onMount(() => {
     scene = new Scene();
-    camera = new PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+    camera = new PerspectiveCamera($fov, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(...cameraPositions[0]);
 
     renderer = new WebGLRenderer({ antialias: true });
@@ -46,7 +68,7 @@
     controls.enableZoom = true;
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.target.set(0, 0, 0);
+    controls.target.set(...focusTargets[0]);
     controls.maxPolarAngle = Math.PI * 0.85;
     controls.minDistance = 1;
     controls.maxDistance = 50;
@@ -93,6 +115,9 @@
   // Add reactive statement to log camera position changes
   $: if ($cameraPos && camera) {
     camera.position.set(...$cameraPos);
+    camera.fov = $fov;
+    camera.updateProjectionMatrix();
+    controls.target.set(...$targetPos);
     console.log('Camera position updated:', $cameraPos);
   }
 </script>
