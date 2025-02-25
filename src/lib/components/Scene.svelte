@@ -4,6 +4,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { Box3, Vector3, PerspectiveCamera, Scene, Color, GridHelper, AxesHelper, AmbientLight, DirectionalLight, Object3D, WebGLRenderer } from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+  import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
   import { Canvas } from '@threlte/core';
 
   export let progress = 0;
@@ -65,9 +66,15 @@
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
-    if (model) {
+    const loader = new GLTFLoader();
+    loader.load('/Neuron.glb', (gltf) => {
+      model = gltf.scene;
       scene.add(model);
-    }
+      const box = new Box3().setFromObject(model);
+      const center = box.getCenter(new Vector3());
+      console.log('Model bounding box:', box);
+      // Move camera or model so the model is in view
+    });
 
     animate();
   });
