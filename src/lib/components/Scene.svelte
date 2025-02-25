@@ -69,6 +69,7 @@
     const loader = new GLTFLoader();
     loader.load('/Neuron.glb', (gltf) => {
       model = gltf.scene;
+      model.rotation.z = Math.PI; // Rotate the model 180 degrees around the z-axis
       scene.add(model);
       const box = new Box3().setFromObject(model);
       const center = box.getCenter(new Vector3());
