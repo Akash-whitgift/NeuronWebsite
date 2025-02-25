@@ -91,7 +91,8 @@
   });
 
   // Add reactive statement to log camera position changes
-  $: if ($cameraPos) {
+  $: if ($cameraPos && camera) {
+    camera.position.set(...$cameraPos);
     console.log('Camera position updated:', $cameraPos);
   }
 </script>
@@ -103,5 +104,13 @@
   :global(body) {
     margin: 0;
     background: #202030;
+  }
+  :global(canvas) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1; /* Ensure the canvas is in the background */
   }
 </style>
