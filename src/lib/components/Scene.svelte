@@ -10,11 +10,11 @@
   export let progress = 0;
 
   const cameraPositions = [
-    [15, 10, 20],    // Initial view - further back
-    [8, 5, 12],      // Soma
+    [10, 15, 20],    // Initial view - further back
+    [5, 5, 10],      // Soma
     [10, 5, 10],     // Dendrites
-    [-10, 5, 10],    // Axon
-    [0, -8, 12]      // Synaptic terminals
+    [-5, 2, 2],    // Axon
+    [0, 5, 10]      // Synaptic terminals
   ];
 
   $: currentSection = Math.floor(progress * 4);
@@ -67,9 +67,9 @@
     scene.add(directionalLight);
 
     const loader = new GLTFLoader();
-    loader.load('/Neuron.glb', (gltf) => {
+    loader.load('/Neuron2.glb', (gltf) => {
       model = gltf.scene;
-      model.rotation.z = Math.PI; // Rotate the model 180 degrees around the z-axis
+      // model.rotation.z = Math.PI; // Rotate the model 180 degrees around the z-axis
       scene.add(model);
       const box = new Box3().setFromObject(model);
       const center = box.getCenter(new Vector3());
