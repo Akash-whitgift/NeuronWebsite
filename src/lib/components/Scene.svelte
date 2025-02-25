@@ -2,10 +2,11 @@
   import { tweened } from 'svelte/motion';
   import { cubicInOut } from 'svelte/easing';
   import { onMount, onDestroy } from 'svelte';
-  import { Box3, Vector3, PerspectiveCamera, Scene, Color, GridHelper, AxesHelper, AmbientLight, DirectionalLight, Object3D, WebGLRenderer } from 'three';
+  import { Box3, Vector3, PerspectiveCamera, Scene, Color, AmbientLight, DirectionalLight, PointLight, HemisphereLight, WebGLRenderer, SphereGeometry, MeshBasicMaterial, Mesh } from 'three';
   import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
   import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
   import { Canvas } from '@threlte/core';
+  import { writable } from 'svelte/store';
 
   export let progress = 0;
 
@@ -54,9 +55,23 @@
   let camera;
   let renderer;
   let controls;
+  let impulse;
+
+  const counter = writable(0);
+  const opacity = writable(0);
+
+  function updateCounter() {
+    const maxScroll = document.body.scrollHeight - window.innerHeight;
+    const scrollProgress = window.scrollY / maxScroll;
+    const count = Math.min(100, Math.floor(scrollProgress * 100));
+    counter.set(count);
+    opacity.set(scrollProgress);
+  }
 
   onMount(() => {
     scene = new Scene();
+    scene.background = new Color(0x101010); // Set background color
+
     camera = new PerspectiveCamera($fov, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.set(...cameraPositions[0]);
 
@@ -73,14 +88,7 @@
     controls.minDistance = 1;
     controls.maxDistance = 50;
 
-    const gridHelper = new GridHelper(50, 50);
-    gridHelper.position.set(0, -2, 0);
-    scene.add(gridHelper);
-
-    const axesHelper = new AxesHelper(25);
-    scene.add(axesHelper);
-
-    const ambientLight = new AmbientLight(1);
+    const ambientLight = new AmbientLight(0x404040, 1); // Soft white light
     scene.add(ambientLight);
 
     const directionalLight = new DirectionalLight(0xffffff, 1);
@@ -88,18 +96,36 @@
     directionalLight.castShadow = true;
     scene.add(directionalLight);
 
+    const pointLight = new PointLight(0xffffff, 1, 100);
+    pointLight.position.set(10, 10, 10);
+    scene.add(pointLight);
+
+    const hemisphereLight = new HemisphereLight(0xffffbb, 0x080820, 1);
+    scene.add(hemisphereLight);
+
     const loader = new GLTFLoader();
     loader.load('/Neuron2.glb', (gltf) => {
       model = gltf.scene;
-      // model.rotation.z = Math.PI; // Rotate the model 180 degrees around the z-axis
       scene.add(model);
       const box = new Box3().setFromObject(model);
       const center = box.getCenter(new Vector3());
       console.log('Model bounding box:', box);
-      // Move camera or model so the model is in view
+
+      // Create the impulse
+      const geometry = new SphereGeometry(0.1, 32, 32);
+      const material = new MeshBasicMaterial({ color: 0xff0000 });
+      impulse = new Mesh(geometry, material);
+      impulse.position.set(0, 0, -1); // Start position of the impulse
+      scene.add(impulse);
+
+      animateImpulse();
     });
 
     animate();
+
+    // Animate counter and opacity on scroll
+    window.addEventListener('scroll', updateCounter);
+    updateCounter();
   });
 
   function animate() {
@@ -108,8 +134,23 @@
     renderer.render(scene, camera);
   }
 
+  function animateImpulse() {
+    const duration = 2000; // Duration of the animation in milliseconds
+    const start = { x: 0, y: 0, z: -1 };
+    const end = { x: 0, y: 0, z: -4 };
+
+    const tween = new TWEEN.Tween(start)
+      .to(end, duration)
+      .onUpdate(() => {
+        impulse.position.set(start.x, start.y, start.z);
+      })
+      .repeat(Infinity)
+      .start();
+  }
+
   onDestroy(() => {
     document.body.removeChild(renderer.domElement);
+    window.removeEventListener('scroll', updateCounter);
   });
 
   // Add reactive statement to log camera position changes
@@ -118,17 +159,22 @@
     camera.fov = $fov;
     camera.updateProjectionMatrix();
     controls.target.set(...$targetPos);
-    console.log('Camera position updated:', $cameraPos);
+    // console.log('Camera position updated:', $cameraPos);
   }
 </script>
+
 <Canvas>
   <!-- The Three.js scene will be rendered here -->
 </Canvas>
 
+<div class="fixed top-5 left-5 text-2xl text-white font-bold bg-black bg-opacity-50 p-2 rounded">
+  {$counter}
+</div>
+
 <style>
   :global(body) {
     margin: 0;
-    background: #202030;
+    background: #101010;
   }
   :global(canvas) {
     position: fixed;
