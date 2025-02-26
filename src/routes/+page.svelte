@@ -64,6 +64,7 @@
           in:blur={{duration: 800, amount: 10}}>
         The Structure of a Neuron (Work in Progress)
       </h1>
+      <p>Scroll to continue</p>
     
   </section>
 
