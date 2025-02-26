@@ -73,7 +73,7 @@
       <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
            in:blur={{duration: 800, amount: 10}}>
         <h2 class="text-3xl mb-4">Cell Body (Soma)</h2>
-        <p>The soma is the cell body of the neuron, containing the nucleus and other vital organelles.</p>
+        <!--<p>The soma is the cell body of the neuron, containing the nucleus and other vital organelles.</p>-->
       </div>
    
   </section>
@@ -83,7 +83,7 @@
       <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
            in:blur={{duration: 800, amount: 10}}>
         <h2 class="text-3xl mb-4">Dendrites</h2>
-        <p>Dendrites are branch-like extensions that receive signals from other neurons.</p>
+        <!--<p>Dendrites are branch-like extensions that receive signals from other neurons.</p>-->
       </div>
     
   </section>
@@ -93,7 +93,7 @@
       <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
            in:blur={{duration: 800, amount: 10}}>
         <h2 class="text-3xl mb-4">Axon</h2>
-        <p>The axon is a long fiber that conducts electrical impulses away from the soma to other neurons.</p>
+       <!-- <p>The axon is a long fiber that conducts electrical impulses away from the soma to other neurons.</p> -->
       </div>
    
   </section>
@@ -103,7 +103,7 @@
       <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
            in:blur={{duration: 800, amount: 10}}>
         <h2 class="text-3xl mb-4">Synaptic Terminals</h2>
-        <p>These terminals release neurotransmitters to communicate with other neurons.</p>
+       <!-- <p>These terminals release neurotransmitters to communicate with other neurons.</p> -->
       </div>
     
   </section>
