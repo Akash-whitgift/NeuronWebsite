@@ -8,122 +8,118 @@
   let scrollY;
   let innerHeight;
   const progress = spring(0);
+  let scrollContainer;
   
-  // Track which sections should be visible based on scroll position
-  let section1Visible = false;
-  let section2Visible = false;
-  let section3Visible = false;
-  let section4Visible = false;
-  let section5Visible = false;
-
-  // Update section visibility based on scroll position
-  $: {
-    const pageHeight = 500; // vh
-    const sectionHeight = pageHeight / 5; // Each section is 1/5 of the total height
-    
-    // Calculate thresholds for when each section becomes visible
-    section1Visible = scrollY < sectionHeight;
-    section2Visible = scrollY >= sectionHeight * 0.8 && scrollY < sectionHeight * 1.8;
-    section3Visible = scrollY >= sectionHeight * 1.8 && scrollY < sectionHeight * 2.8;
-    section4Visible = scrollY >= sectionHeight * 2.8 && scrollY < sectionHeight * 3.8;
-    section5Visible = scrollY >= sectionHeight * 3.8;
-  }
-
   onMount(() => {
     const updateProgress = () => {
-      const maxScroll = document.body ? document.body.scrollHeight - innerHeight : 0;
-      progress.set(maxScroll > 0 ? scrollY / maxScroll : 0);
+      if (!scrollContainer) return;
+      const maxScroll = scrollContainer.scrollHeight - scrollContainer.clientHeight;
+      progress.set(maxScroll > 0 ? scrollContainer.scrollTop / maxScroll : 0);
     };
 
-    document.body.style.height = '500vh'; // Make page scrollable
-
-    // Update progress initially and on scroll/resize
-    updateProgress();
-    window.addEventListener('scroll', updateProgress);
-    window.addEventListener('resize', updateProgress);
+    if (scrollContainer) {
+      scrollContainer.addEventListener('scroll', updateProgress);
+      window.addEventListener('resize', updateProgress);
+      updateProgress();
+    }
 
     return () => {
-      window.removeEventListener('scroll', updateProgress);
+      if (scrollContainer) {
+        scrollContainer.removeEventListener('scroll', updateProgress);
+      }
       window.removeEventListener('resize', updateProgress);
     };
   });
 </script>
 
-<svelte:window bind:scrollY bind:innerHeight />
-
-<div class="fixed inset-0">
+<div class="fixed inset-0 z-0">
   <Canvas>
     <Scene progress={$progress} />
   </Canvas>
 </div>
 
-<div class="relative z-10">
-  <section class="h-screen  text-white p-8 ">
-    
-      <h1 class="text-4xl font-bold p-4 rounded backdrop-blur-sm bg-black/30" 
-          in:blur={{duration: 800, amount: 10}}>
-        The Structure of a Neuron (Work in Progress)
-      </h1>
-      <p>Scroll to continue</p>
-    
+<div class="fixed inset-0 z-10 h-screen w-screen scroll-container" bind:this={scrollContainer}>
+  <section class="section">
+    <div class="p-4 rounded backdrop-blur-sm bg-black/30 bg-opacity-75 ">
+      <h1 class="text-4xl font-bold mb-4">The Structure of a Neuron</h1>
+      <p class="text-center">Scroll to explore</p>
+    </div>
   </section>
 
-  <section class="h-screen flex items-end justify-start text-white p-8">
-   
-      <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
-           in:blur={{duration: 800, amount: 10}}>
-        <h2 class="text-3xl mb-4">Cell Body (Soma)</h2>
-        <!--<p>The soma is the cell body of the neuron, containing the nucleus and other vital organelles.</p>-->
-      </div>
-   
+  <section class="section">
+    <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30 ml-8 mb-16">
+      <h2 class="text-3xl mb-4">Cell Body (Soma)</h2>
+      <p>The soma contains the nucleus and other vital organelles.</p>
+    </div>
   </section>
 
-  <section class="h-screen flex items-end justify-start text-white p-8">
-   
-      <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
-           in:blur={{duration: 800, amount: 10}}>
-        <h2 class="text-3xl mb-4">Dendrites</h2>
-        <!--<p>Dendrites are branch-like extensions that receive signals from other neurons.</p>-->
-      </div>
-    
+  <section class="section">
+    <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30 mr-8 mb-16 ml-auto">
+      <h2 class="text-3xl mb-4">Dendrites</h2>
+      <p>Branch-like extensions that receive signals from other neurons.</p>
+    </div>
   </section>
 
-  <section class="h-screen flex items-end justify-start text-white p-8">
-   
-      <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
-           in:blur={{duration: 800, amount: 10}}>
-        <h2 class="text-3xl mb-4">Axon</h2>
-       <!-- <p>The axon is a long fiber that conducts electrical impulses away from the soma to other neurons.</p> -->
-      </div>
-   
+  <section class="section">
+    <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30 ml-8 mb-16">
+      <h2 class="text-3xl mb-4">Axon</h2>
+      <p>The long fiber that conducts electrical impulses.</p>
+    </div>
   </section>
 
-  <section class="h-screen flex items-end justify-end text-white p-8">
-    
-      <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30"
-           in:blur={{duration: 800, amount: 10}}>
-        <h2 class="text-3xl mb-4">Synaptic Terminals</h2>
-       <!-- <p>These terminals release neurotransmitters to communicate with other neurons.</p> -->
-      </div>
-    
+  <section class="section">
+    <div class="max-w-2xl p-4 rounded backdrop-blur-sm bg-black/30 mr-8 mb-16 ml-auto">
+      <h2 class="text-3xl mb-4">Synaptic Terminals</h2>
+      <p>Release neurotransmitters to communicate with other neurons.</p>
+    </div>
   </section>
 </div>
 
 <style>
   :global(body) {
     margin: 0;
+    padding: 0;
     background: #000;
     color: white;
-    overflow-x: hidden;
+    overflow: hidden; /* Prevent double scrollbars */
+  }
+  
+  /* We need to ensure the scrollable area can receive mouse events */
+  :global(canvas) {
+    pointer-events: none;
+  }
+  
+  .scroll-container {
+    overflow-y: auto;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    pointer-events: auto;
   }
 
-  .relative.z-10 {
-    pointer-events: none; /* Ensure text does not block interaction with the model */
+  .section {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 2rem;
+    color: white;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
   }
-  section {
-    height: 120vh;
+  
+  /* Alternate section alignment for visual interest */
+  .section:nth-child(odd) {
+    align-items: flex-start;
   }
-  .relative.z-10 section > div {
-    pointer-events: auto; /* Allow interaction with text content */
+  
+  .section:nth-child(even) {
+    align-items: flex-end;
+  }
+  
+  .section:first-child {
+    justify-content: center;
+    align-items: center;
   }
 </style>
