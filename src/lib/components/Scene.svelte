@@ -11,8 +11,7 @@
   export let progress = 0;
 
   const cameraPositions = [
-    [0, 0, 0],
-    [10, 15, 20],    // Initial view - further back
+    // [10, 15, 20],    // Initial view - further back
     [5, 5, 5],      // Soma
     [5, 3, 5],     // Dendrites
     [-5, 2, 2],    // Axon
@@ -20,15 +19,14 @@
   ];
 
   const focusTargets = [
-    [0, 0, 0],
-    [0, 0, 0],       // Initial view - origin
+    // [0, 0, 0],       // Initial view - origin
     [0, 0, 2],       // Soma
     [2.5, 0.5, 4],       // Dendrites
     [0, 0, -1],      // Axon
     [0, 0, -4]        // Synaptic terminals
   ];
 
-  const fovs = [20, 20, 50, 45, 40, 30]; // FOV values for each section
+  const fovs = [ 20, 50, 45, 40, 30]; // FOV values for each section
 
   $: currentSection = Math.floor(progress * 4);
   $: sectionProgress = (progress * 4) % 1;
