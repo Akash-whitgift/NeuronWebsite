@@ -11,7 +11,7 @@
   export let progress = 0;
 
   const cameraPositions = [
-    // [10, 15, 20],    // Initial view - further back
+    [10, 15, 20],    // Initial view - further back
     [5, 5, 5],      // Soma
     [5, 3, 5],     // Dendrites
     [-5, 2, 2],    // Axon
@@ -19,29 +19,32 @@
   ];
 
   const focusTargets = [
-    // [0, 0, 0],       // Initial view - origin
+    [0, 0, 0],       // Initial view - origin
     [0, 0, 2],       // Soma
     [2.5, 0.5, 4],       // Dendrites
     [0, 0, -1],      // Axon
     [0, 0, -4]        // Synaptic terminals
   ];
 
-  const fovs = [ 20, 50, 45, 40, 30]; // FOV values for each section
+  const fovs = [20, 50, 45, 40, 30]; // FOV values for each section
 
+  // Calculate the initial section based on the initial progress value
+  const initialSection = Math.floor(progress * 4);
   $: currentSection = Math.floor(progress * 4);
   $: sectionProgress = (progress * 4) % 1;
 
-  const cameraPos = tweened(cameraPositions[0], {
+  // Initialize tweened stores with values based on the initial section
+  const cameraPos = tweened(cameraPositions[initialSection], {
     duration: 2000,
     easing: cubicInOut
   });
 
-  const fov = tweened(fovs[0], {
+  const fov = tweened(fovs[initialSection], {
     duration: 2000,
     easing: cubicInOut
   });
 
-  const targetPos = tweened(focusTargets[0], {
+  const targetPos = tweened(focusTargets[initialSection], {
     duration: 2000,
     easing: cubicInOut
   });
