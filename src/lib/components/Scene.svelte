@@ -12,13 +12,14 @@
   // Add a callback prop to send screen coordinates to parent
   export let onPointsUpdate = (points) => {};
 
+  const DebugNeurons = false;
   // 3D world coordinates for different parts of the neuron
   const neuronPoints = [
     [0, 0, 0],       // Overall neuron - center point
     [0, 0, 2],       // Soma
-    [2.5, 0.5, 4],   // Dendrites
+    [2.45, 0.5, 4],   // Dendrites
     [0, 0, -1],      // Axon
-    [0, 0, -4]       // Synaptic terminals
+    [0.15, 0, -4]       // Synaptic terminals
   ];
 
   const cameraPositions = [
@@ -37,7 +38,7 @@
     [0, 0, -4]        // Synaptic terminals
   ];
 
-  const fovs = [20, 50, 45, 40, 30]; // FOV values for each section
+  const fovs = [25, 50, 45, 40, 30]; // FOV values for each section
 
   // Calculate the initial section based on the initial progress value - FIX HERE
   const initialSection = Math.floor(progress * 5); // Changed from 4 to 5 to match +page.svelte
@@ -196,7 +197,7 @@
       }
     });
     
-    // Create visible markers at important points for debugging (optional)
+    if (DebugNeurons == true) {// Create visible markers at important points for debugging (optional)
     neuronPoints.forEach((point, index) => {
       const markerGeometry = new SphereGeometry(0.15, 16, 16); // Even larger size
       const markerMaterial = new MeshBasicMaterial({ 
@@ -217,10 +218,11 @@
       const marker = new Mesh(markerGeometry, markerMaterial);
       marker.position.set(point[0], point[1], point[2]);
       scene.add(marker);
-      
+    
       // Log the marker positions for debugging
       console.log(`Marker ${index} position:`, point);
     });
+  }
 
     // Do an initial position update
     setTimeout(updateScreenPositions, 100);

@@ -56,11 +56,19 @@
       const currentProgress = maxScroll > 0 ? scrollContainer.scrollTop / maxScroll : 0;
       progress.set(currentProgress);
       
-      // Calculate the current section (0-4 for each section)
-      const newSection = Math.floor(currentProgress * 5);
+      // Calculate the section with a cap at 4 (the last valid section)
+      const newSection = Math.min(4, Math.floor(currentProgress * 5));
       
-      // If the section changed, handle the transition
-      if (newSection !== currentSection) {
+      // Special case: If we're very close to the bottom, always show the last section
+      if (scrollContainer.scrollTop + scrollContainer.clientHeight >= scrollContainer.scrollHeight - 20) {
+        // If we're at the bottom, force the last section
+        if (currentSection !== 4) {
+          previousSection = currentSection;
+          currentSection = 4;
+          handleSectionChange();
+        }
+      } else if (newSection !== currentSection) {
+        // Regular section change handling
         previousSection = currentSection;
         currentSection = newSection;
         handleSectionChange();
@@ -85,6 +93,12 @@
   function handleSectionChange() {
     // Store the target section for after animation completes
     targetSection = currentSection;
+    
+    // Skip popup for the first section (index 0)
+    if (targetSection === 0) {
+      popupVisible = false;
+      return;
+    }
     
     // If popup is currently visible, animate it out first
     if (popupVisible) {
@@ -187,11 +201,10 @@
       <p>Release neurotransmitters to communicate with other neurons.</p>
     </div>
   </section>
-  <section class="section" style="height: 0; visibility: hidden;"></section>
 </div>
 
-<!-- Add popup information box with enhanced transitions -->
-{#if currentSection >= 0 && popupVisible}
+<!-- Add popup information box with enhanced transitions - Modified for section check -->
+{#if currentSection > 0 && popupVisible}
   <div class="popup" 
        style="--popup-x: {currentPopupPosition.x}; --popup-y: {currentPopupPosition.y};">
     
