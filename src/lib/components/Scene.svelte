@@ -9,6 +9,17 @@
   import { writable } from 'svelte/store';
 
   export let progress = 0;
+  // Add a callback prop to send screen coordinates to parent
+  export let onPointsUpdate = (points) => {};
+
+  // 3D world coordinates for different parts of the neuron
+  const neuronPoints = [
+    [0, 0, 0],       // Overall neuron - center point
+    [0, 0, 2],       // Soma
+    [2.5, 0.5, 4],   // Dendrites
+    [0, 0, -1],      // Axon
+    [0, 0, -4]       // Synaptic terminals
+  ];
 
   const cameraPositions = [
     [10, 15, 20],    // Initial view - further back
@@ -28,10 +39,13 @@
 
   const fovs = [20, 50, 45, 40, 30]; // FOV values for each section
 
-  // Calculate the initial section based on the initial progress value
-  const initialSection = Math.floor(progress * 4);
-  $: currentSection = Math.floor(progress * 4);
-  $: sectionProgress = (progress * 4) % 1;
+  // Calculate the initial section based on the initial progress value - FIX HERE
+  const initialSection = Math.floor(progress * 5); // Changed from 4 to 5 to match +page.svelte
+  $: currentSection = Math.floor(progress * 5); // Changed from 4 to 5
+  $: sectionProgress = (progress * 5) % 1; // Changed from 4 to 5
+
+  // Make sure the section index doesn't go out of bounds
+  $: validSection = Math.min(currentSection, 4);
 
   // Initialize tweened stores with values based on the initial section
   const cameraPos = tweened(cameraPositions[initialSection], {
@@ -49,9 +63,10 @@
     easing: cubicInOut
   });
 
-  $: cameraPos.set(cameraPositions[currentSection]);
-  $: fov.set(fovs[currentSection]);
-  $: targetPos.set(focusTargets[currentSection]);
+  // Update these lines to use validSection instead of currentSection
+  $: cameraPos.set(cameraPositions[Math.min(currentSection, 4)]);
+  $: fov.set(fovs[Math.min(currentSection, 4)]);
+  $: targetPos.set(focusTargets[Math.min(currentSection, 4)]);
 
   let model;
   let scene;
@@ -69,6 +84,47 @@
     const count = Math.min(100, Math.floor(scrollProgress * 100));
     counter.set(count);
     opacity.set(scrollProgress);
+  }
+
+  // Function to convert 3D world coordinates to 2D screen coordinates
+  function worldToScreen(worldX, worldY, worldZ, camera, renderer) {
+    if (!camera || !renderer) return { x: 50, y: 50 }; // Default to center if not available
+    
+    // Create a vector from the world coordinates
+    const vector = new Vector3(worldX, worldY, worldZ);
+    
+    // Check if the point is behind the camera
+    const posClone = camera.position.clone();
+    const targetToPoint = vector.clone().sub(posClone);
+    const cameraDirection = controls.target.clone().sub(posClone).normalize();
+    const dotProduct = targetToPoint.normalize().dot(cameraDirection);
+    
+    // If the point is behind camera, use a default visible point
+    if (dotProduct < 0) {
+      return { x: 50, y: 50 };
+    }
+    
+    // Project the 3D point to the 2D plane
+    vector.project(camera);
+    
+    // Convert normalized device coordinates to screen percentage (0-100)
+    return {
+      x: ((vector.x + 1) / 2) * 100,
+      y: ((1 - vector.y) / 2) * 100
+    };
+  }
+
+  // Function to update all point screen positions
+  function updateScreenPositions() {
+    if (!camera || !renderer) return;
+    
+    const screenPositions = neuronPoints.map(point => {
+      // Get pixel coordinates
+      return worldToScreen(point[0], point[1], point[2], camera, renderer);
+    });
+    
+    // Call the callback with updated screen positions
+    onPointsUpdate(screenPositions);
   }
 
   onMount(() => {
@@ -129,12 +185,52 @@
     // Animate counter and opacity on scroll
     window.addEventListener('scroll', updateCounter);
     updateCounter();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      if (renderer) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        updateScreenPositions();
+      }
+    });
+    
+    // Create visible markers at important points for debugging (optional)
+    neuronPoints.forEach((point, index) => {
+      const markerGeometry = new SphereGeometry(0.15, 16, 16); // Even larger size
+      const markerMaterial = new MeshBasicMaterial({ 
+        color: index === 0 ? 0xffff00 : // Yellow for center
+               index === 1 ? 0xff00ff : // Purple for soma
+               index === 2 ? 0x00ffff : // Cyan for dendrites
+               index === 3 ? 0xff0000 : // Red for axon
+                            0x00ff00,   // Green for terminals
+        transparent: true,
+        opacity: 0.8,
+        emissive: index === 0 ? 0xffff00 : 
+                  index === 1 ? 0xff00ff : 
+                  index === 2 ? 0x00ffff :
+                  index === 3 ? 0xff0000 :
+                               0x00ff00,
+        emissiveIntensity: 0.5
+      });
+      const marker = new Mesh(markerGeometry, markerMaterial);
+      marker.position.set(point[0], point[1], point[2]);
+      scene.add(marker);
+      
+      // Log the marker positions for debugging
+      console.log(`Marker ${index} position:`, point);
+    });
+
+    // Do an initial position update
+    setTimeout(updateScreenPositions, 100);
   });
 
   function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+    updateScreenPositions(); // Update screen positions on each frame
   }
 
   function animateImpulse() {
@@ -162,6 +258,7 @@
     camera.fov = $fov;
     camera.updateProjectionMatrix();
     controls.target.set(...$targetPos);
+    updateScreenPositions();
     // console.log('Camera position updated:', $cameraPos);
   }
 </script>
