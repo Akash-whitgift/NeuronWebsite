@@ -57,11 +57,9 @@
         <ul class="mb-4 list-disc pl-5">
           <li>The <strong>nucleus</strong> - contains DNA and controls cellular activities</li>
           <li><strong>Mitochondria</strong> - produce energy through cellular respiration</li>
-          <li><strong>Endoplasmic reticulum</strong> - involved in protein synthesis</li>
-          <li><strong>Golgi apparatus</strong> - processes and packages proteins</li>
         </ul>
         <p class="mb-4">The soma integrates signals received from the dendrites and initiates action potentials that travel down the axon.</p>
-        <p>Damage to the soma often leads to cell death, as it contains the essential machinery needed for neuron survival.</p>
+        <p>Damage to the soma often leads to cell death, as it contains the essential organelles needed for neuron survival.</p>
       `
     },
     { 
@@ -86,16 +84,12 @@
       content: "A long fiber that carries electrical impulses away from the soma to other neurons.", 
       position: { x: "25%", y: "40%" },
       detailedContent: `
-        <h3 class="text-xl mb-4">The Axon: The Information Highway</h3>
-        <p class="mb-4">The axon is a long, slender projection that conducts electrical impulses away from the neuron's cell body. These signals, called action potentials, travel along the axon to the synaptic terminals.</p>
-        <p class="mb-4">Important features of axons include:</p>
-        <ul class="mb-4 list-disc pl-5">
-          <li>The <strong>axon hillock</strong> - where action potentials are initiated</li>
-          <li><strong>Myelin sheath</strong> - an insulating layer that increases signal conduction speed</li>
-          <li><strong>Nodes of Ranvier</strong> - gaps in the myelin where action potentials are regenerated</li>
-          <li><strong>Axonal transport</strong> - the movement of materials along the axon</li>
-        </ul>
-        <p class="mb-4">Some axons can be remarkably long - motor neurons controlling muscles in the feet have axons that extend from the spinal cord all the way to the foot!</p>
+        <h3 class="text-xl mb-4">The Axon</h3>
+        <p class="mb-4">The axon is a long, slender projection that conducts electrical impulses away from the neuron's cell body. These signals travel along the axon to the synaptic terminals.</p>
+
+        <p>The axon has a <strong>Myelin sheath</strong> - an insulating layer that increases signal conduction speed</p>
+    
+        <p class="mb-4">Some axons can be remarkably long - motor neurons controlling muscles in the feet have axons that extend from the spinal cord all the way to the foot</p>
         <p>Damage to axons, such as in spinal cord injuries, can disrupt critical neural pathways and lead to loss of function.</p>
       `
     },
@@ -105,20 +99,21 @@
       position: { x: "75%", y: "60%" },
       detailedContent: `
         <h3 class="text-xl mb-4">Synaptic Terminals: The Communication Points</h3>
-        <p class="mb-4">Synaptic terminals (also called axon terminals or terminal buttons) are specialized structures at the end of axons where neurotransmitters are released to communicate with target cells.</p>
+        <p class="mb-4">Synaptic terminals are specialized structures at the end of axons where neurotransmitters are released to communicate with target cells.</p>
         <p class="mb-4">The process of synaptic transmission involves several steps:</p>
         <ol class="mb-4 list-decimal pl-5">
-          <li>An action potential arrives at the synaptic terminal</li>
-          <li>Voltage-gated calcium channels open, allowing calcium to enter</li>
-          <li>Calcium triggers the fusion of synaptic vesicles with the membrane</li>
-          <li>Neurotransmitters are released into the synaptic cleft</li>
-          <li>Neurotransmitters bind to receptors on the postsynaptic cell</li>
+          <li>An electrical impulse arrives at the synaptic terminal</li>
+          <li>The impulse causes the vesicle in the axon terminal to fuse with the membrane</li>
+          <li>Acetylcholine is released and diffuses across the synapse</li>
+          <li>Acetylcholine then binds to receptors on the membrane of the second neuron</li>
+          <li>This starts an electrical impulse in the second neurone</li>
+          <li>The neurotransmitter is then broken down by ethanoic acid</li>
         </ol>
-        <p class="mb-4">There are two main types of synapses:</p>
+        <!-- <p class="mb-4">There are two main types of synapses:</p>
         <ul class="mb-4 list-disc pl-5">
           <li><strong>Chemical synapses</strong> - use neurotransmitters to transmit signals</li>
           <li><strong>Electrical synapses</strong> - allow direct ion flow between connected cells</li>
-        </ul>
+        </ul> -->
         <p>Synaptic terminals are highly plastic, meaning they can strengthen or weaken over time, forming the basis for learning and memory.</p>
       `
     }
