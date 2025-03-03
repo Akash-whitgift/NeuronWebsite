@@ -67,16 +67,16 @@
       content: "Branch-like structures that receive signals from other neurons and transmit them to the soma.", 
       position: { x: "75%", y: "30%" },
       detailedContent: `
-        <h3 class="text-xl mb-4">Dendrites: The Information Receivers</h3>
-        <p class="mb-4">Dendrites are branched extensions of the neuron that receive signals from other neurons. Their tree-like structure provides an extensive surface area for forming connections.</p>
+        <h3 class="text-xl mb-4">Dendrites</h3>
+        <p class="mb-4">Dendrites are branched extensions of the neuron that receive signals from other neurons. Their tree-like structure provides a large surface area for forming connections.</p>
         <p class="mb-4">Key characteristics of dendrites include:</p>
         <ul class="mb-4 list-disc pl-5">
-          <li><strong>Dendritic spines</strong> - small protrusions that form synapses with axon terminals</li>
+          <li><strong>Dendritic spines</strong> - small spines that extend from the cell body and have receptors which can bind to neurons</li>
           <li><strong>Graded potentials</strong> - local changes in membrane potential that can either excite or inhibit the neuron</li>
           <li><strong>Signal integration</strong> - dendrites sum incoming signals both spatially and temporally</li>
         </ul>
         <p class="mb-4">A single neuron can have thousands of dendrites, allowing it to receive input from many other neurons simultaneously.</p>
-        <p>Dendrites actively participate in information processing through mechanisms like dendritic spikes and calcium signaling.</p>
+        <p>Dendrites actively participate in information processing.</p>
       `
     },
     { 
