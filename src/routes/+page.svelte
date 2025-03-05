@@ -24,7 +24,8 @@
   function handlePointsUpdate(points) {
     screenPoints = points;
     // Log to see what coordinates we're getting
-    console.log('Screen points updated:', points);
+    // console.log('Screen points updated:', points); - disabled for now (DEBUG), spams console
+
   }
   
   // Add popup information for each section with detailed modal content
