@@ -100,12 +100,12 @@
       position: { x: "75%", y: "60%" },
       detailedContent: `
         <h3 class="text-xl mb-4">Synaptic Terminals: The Communication Points</h3>
-        <p class="mb-4">Synaptic terminals are specialized structures at the end of axons where neurotransmitters are released to communicate with target cells.</p>
+        <p class="mb-4">Synaptic terminals are specialized structures at the end of axons where <strong>neurotransmitters</strong> are released to communicate with target cells.</p>
         <p class="mb-4">The process of synaptic transmission involves several steps:</p>
         <ol class="mb-4 list-decimal pl-5">
           <li>An electrical impulse arrives at the synaptic terminal</li>
           <li>The impulse causes the vesicle in the axon terminal to fuse with the membrane</li>
-          <li>Acetylcholine is released and diffuses across the synapse</li>
+          <li><strong>Acetylcholine</strong> is released and diffuses across the synapse</li>
           <li>Acetylcholine then binds to receptors on the membrane of the second neuron</li>
           <li>This starts an electrical impulse in the second neurone</li>
           <li>The neurotransmitter is then broken down by ethanoic acid</li>
