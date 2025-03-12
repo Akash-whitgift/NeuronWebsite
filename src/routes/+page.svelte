@@ -82,11 +82,11 @@
     },
     { 
       title: "Axon", 
-      content: "A long fiber that carries electrical impulses away from the soma to other neurons.", 
+      content: "A long fibre that carries electrical impulses away from the soma to other neurons.", 
       position: { x: "25%", y: "40%" },
       detailedContent: `
         <h3 class="text-xl mb-4">The Axon</h3>
-        <p class="mb-4">The axon is a long, slender projection that conducts electrical impulses away from the neuron's cell body. These signals travel along the axon to the synaptic terminals.</p>
+        <p class="mb-4">The Axon is an extension of the cell surface membranes and cytoplasm, it carries electrical signals. These signals travel along the axon to the synaptic terminals.</p>
 
         <p>The axon has a <strong>Myelin sheath</strong> - an insulating layer that increases signal conduction speed</p>
     
@@ -276,7 +276,7 @@
 <div class="fixed inset-0 z-10 h-screen w-screen scroll-container" bind:this={scrollContainer}>
   <section class="section">
     <div class="p-4 rounded backdrop-blur-sm bg-black/30 bg-opacity-75 ">
-      <h1 class="text-5xl font-bold mb-4">The Structure of a Neuron</h1>
+      <h1 class="text-5xl font-bold mb-4">The Structure of a Sensory Neuron</h1>
       <p class="text-center">Scroll to explore</p>
     </div>
   </section>
@@ -368,7 +368,7 @@
     transition:fade={{ duration: 200 }}
   >
     <div 
-      class="modal-container relative w-[90%] md:w-[80%] h-[75%] md:w-[80] rounded-lg overflow-y-auto"
+      class="modal-container relative w-[90%] md:w-[80%] lg:w-[70%] xl:w-[60%] h-[75%] md:h-[80%] rounded-lg overflow-y-auto"
       transition:scale={{ duration: 300, start: 0.95 }}
     >
       <!-- Close button -->
@@ -382,12 +382,12 @@
       </button>
 
       <!-- Modal content with larger text -->
-      <div class="p-8 md:p-10">
-        <h2 class="text-3xl md:text-4xl font-bold mb-6 text-blue-400 border-b border-blue-500/30 pb-3">
+      <div class="p-8 md:p-10 lg:p-12">
+        <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold mb-6 text-blue-400 border-b border-blue-500/30 pb-3">
           {currentModalContent.title}
         </h2>
         
-        <div class="modal-content text-white/90 text-lg" transition:fade={{ delay: 150, duration: 300 }}>
+        <div class="modal-content text-white/90 text-lg md:text-xl" transition:fade={{ delay: 150, duration: 300 }}>
           <!-- Use the HTML content from detailedContent -->
           {@html currentModalContent.detailedContent}
         </div>
@@ -452,6 +452,18 @@
     transform: translate(-50%, -50%);
     z-index: 20; /* Make sure it's above the scroll container */
     width: 300px;
+    
+    /* Added responsive width for larger screens */
+    @media (min-width: 768px) {
+      width: 380px;
+    }
+    @media (min-width: 1024px) {
+      width: 450px;
+    }
+    @media (min-width: 1280px) {
+      width: 500px;
+    }
+    
     /* No transition here to allow instant repositioning */
     cursor: pointer;
     transition: transform 0.2s ease;
@@ -602,6 +614,7 @@
     border: 1px solid rgba(255, 255, 255, 0.2);
     backdrop-filter: blur(5px);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    max-height: 90vh; /* Ensure it doesn't get too tall */
   }
   
   .modal-content {
@@ -612,10 +625,21 @@
     color: #63b3ed;
     font-size: 1.5rem;
     margin-bottom: 1.5rem;
+    
+    @media (min-width: 768px) {
+      font-size: 1.75rem;
+    }
+    @media (min-width: 1024px) {
+      font-size: 2rem;
+    }
   }
   
   .modal-content p {
     margin-bottom: 1.25rem;
+    
+    @media (min-width: 1024px) {
+      margin-bottom: 1.5rem;
+    }
   }
   
   .modal-content strong {
