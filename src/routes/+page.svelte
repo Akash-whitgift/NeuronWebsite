@@ -276,7 +276,7 @@
 <div class="fixed inset-0 z-10 h-screen w-screen scroll-container" bind:this={scrollContainer}>
   <section class="section">
     <div class="p-4 rounded backdrop-blur-sm bg-black/30 bg-opacity-75 ">
-      <h1 class="text-5xl font-bold mb-4">The Structure of a Sensory Neuron</h1>
+      <h1 class="text-5xl font-bold mb-4">The Structure of a Motor Neuron</h1>
       <p class="text-center">Scroll to explore</p>
     </div>
   </section>
